@@ -12,7 +12,7 @@ export default function ProductCard({ product, directorateColour, onClick }) {
   return (
     <button
       onClick={() => onClick(product)}
-      className="w-full text-left bg-white border border-gds-mid-grey rounded hover:border-gds-blue hover:shadow-md transition-all group"
+      className="w-full text-left bg-white border border-gds-mid-grey rounded overflow-hidden hover:border-gds-blue hover:shadow-md transition-all group"
     >
       <div
         className="h-1 rounded-t"
