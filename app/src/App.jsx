@@ -25,7 +25,7 @@ export default function App() {
   const [saveError, setSaveError] = useState(null)
 
   useEffect(() => {
-    fetch('/products.json')
+    fetch(`${import.meta.env.BASE_URL}products.json`)
       .then(r => { if (!r.ok) throw new Error('Failed to fetch'); return r.json() })
       .then(d => { setData(d); setLoading(false) })
       .catch(e => { setFetchError(e.message); setLoading(false) })
