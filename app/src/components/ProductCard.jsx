@@ -12,13 +12,13 @@ export default function ProductCard({ product, directorateColour, onClick }) {
   return (
     <button
       onClick={() => onClick(product)}
-      className="w-full text-left bg-white border border-gds-mid-grey rounded overflow-hidden hover:border-gds-blue hover:shadow-md transition-all group"
+      className="relative w-full text-left bg-white border border-gds-mid-grey rounded overflow-hidden hover:border-gds-blue hover:shadow-md transition-all group"
     >
       <div
-        className="h-1 rounded-t"
+        className="absolute top-0 left-0 right-0 h-1"
         style={{ backgroundColor: directorateColour }}
       />
-      <div className="p-4">
+      <div className="p-4 pt-5">
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3 className="font-semibold text-gds-dark text-base group-hover:text-gds-blue leading-tight">
             {product.name}
