@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { loginWithGitHub, validateToken } from '../hooks/useGitHub'
+import { loginWithGitHub } from '../hooks/useGitHub'
 
 export default function GitHubAuth({ onAuth, onClose }) {
   const [loading, setLoading] = useState(false)
@@ -9,9 +9,8 @@ export default function GitHubAuth({ onAuth, onClose }) {
     setLoading(true)
     setError(null)
     try {
-      const token = await loginWithGitHub()
-      await validateToken(token)
-      onAuth(token)
+      const user = await loginWithGitHub()
+      onAuth(user)
     } catch (err) {
       setError(err.message || 'Sign-in failed. Please try again.')
       setLoading(false)

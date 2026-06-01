@@ -4,9 +4,7 @@ import FilterBar from './components/FilterBar'
 import DirectorateSection from './components/DirectorateSection'
 import ProductModal from './components/ProductModal'
 import GitHubAuth from './components/GitHubAuth'
-import { commitProductData, validateToken } from './hooks/useGitHub'
-
-const REPO = 'MaxwellRiess/GDS-product-map'
+import { commitProductData, fetchSession, logout } from './hooks/useGitHub'
 
 export default function App() {
   const [data, setData] = useState(null)
@@ -18,7 +16,6 @@ export default function App() {
   const [addingTo, setAddingTo] = useState(null) // { directorateId, programmeId }
 
   const [showAuth, setShowAuth] = useState(false)
-  const [githubToken, setGithubToken] = useState(() => sessionStorage.getItem('gds_gh_token') || '')
   const [githubUser, setGithubUser] = useState(null)
 
   const [saving, setSaving] = useState(false)
@@ -32,12 +29,8 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (!githubToken) { setGithubUser(null); return }
-    validateToken(githubToken).then(setGithubUser).catch(() => {
-      setGithubToken('')
-      sessionStorage.removeItem('gds_gh_token')
-    })
-  }, [githubToken])
+    fetchSession().then(setGithubUser).catch(() => setGithubUser(null))
+  }, [])
 
   function applyFilters(rawData) {
     if (!rawData) return null
@@ -70,7 +63,7 @@ export default function App() {
     setSaving(true)
     setSaveError(null)
     try {
-      await commitProductData(githubToken, REPO, newData)
+      await commitProductData(newData)
       setData(newData)
       successCallback?.()
     } catch (err) {
@@ -81,7 +74,7 @@ export default function App() {
   }
 
   function handleSaveProduct(updatedProduct, directorateId, programmeId) {
-    if (!githubToken) { setShowAuth(true); return }
+    if (!githubUser) { setShowAuth(true); return }
 
     let newData
     if (directorateId && programmeId) {
@@ -122,20 +115,17 @@ export default function App() {
     })
   }
 
-  function handleAuth(token) {
-    setGithubToken(token)
-    sessionStorage.setItem('gds_gh_token', token)
+  function handleAuth(user) {
+    setGithubUser(user)
     setShowAuth(false)
   }
 
   function handleSignOut() {
-    setGithubToken('')
-    setGithubUser(null)
-    sessionStorage.removeItem('gds_gh_token')
+    logout().finally(() => setGithubUser(null))
   }
 
   const filtered = applyFilters(data)
-  const authenticated = !!githubToken
+  const authenticated = !!githubUser
 
   if (loading) {
     return (

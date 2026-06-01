@@ -1,6 +1,8 @@
-const DATA_FILE_PATH = 'app/public/products.json'
+// All GitHub access goes through the Worker on the same origin. The browser
+// never holds a GitHub token: it holds an HttpOnly session cookie the Worker
+// issued, and the Worker commits on the user's behalf via a GitHub App.
 
-// Opens the GitHub consent popup and resolves with an access token.
+// Opens the GitHub consent popup and resolves with the signed-in user.
 // /auth and /callback are served by the same Worker as this app.
 export function loginWithGitHub() {
   return new Promise((resolve, reject) => {
@@ -15,49 +17,36 @@ export function loginWithGitHub() {
       window.removeEventListener('message', handler)
       try { popup.close() } catch { /* ignore */ }
       if (event.data.error) reject(new Error(event.data.error))
-      else resolve(event.data.token)
+      else resolve(event.data.user)
     }
     window.addEventListener('message', handler)
   })
 }
 
-export async function commitProductData(token, repo, newData) {
-  const apiUrl = `https://api.github.com/repos/${repo}/contents/${DATA_FILE_PATH}`
-  const headers = {
-    Authorization: `token ${token}`,
-    'Content-Type': 'application/json',
-    Accept: 'application/vnd.github.v3+json',
-  }
-
-  const getRes = await fetch(apiUrl, { headers })
-  if (!getRes.ok) {
-    const err = await getRes.json()
-    throw new Error(err.message || 'Could not read current file from GitHub')
-  }
-  const current = await getRes.json()
-
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))))
-
-  const putRes = await fetch(apiUrl, {
-    method: 'PUT',
-    headers,
-    body: JSON.stringify({
-      message: 'Update product data via GDS Product Map',
-      content,
-      sha: current.sha,
-    }),
-  })
-
-  if (!putRes.ok) {
-    const err = await putRes.json()
-    throw new Error(err.message || 'Failed to save changes to GitHub')
-  }
+// Returns the signed-in user from the session cookie, or null.
+export async function fetchSession() {
+  const res = await fetch('/api/me', { credentials: 'same-origin' })
+  if (!res.ok) return null
+  const data = await res.json()
+  return data.user
 }
 
-export async function validateToken(token) {
-  const res = await fetch('https://api.github.com/user', {
-    headers: { Authorization: `token ${token}` },
+export async function logout() {
+  await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' })
+}
+
+// Sends the proposed data to the Worker, which validates the session and
+// commits server-side. No token is passed from the browser.
+export async function commitProductData(newData) {
+  const res = await fetch('/api/commit', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newData),
   })
-  if (!res.ok) throw new Error('Invalid token')
-  return res.json()
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}))
+    if (res.status === 401) throw new Error('Your session has expired. Please sign in again.')
+    throw new Error(err.error || 'Failed to save changes')
+  }
 }
