@@ -18,7 +18,7 @@ export default function App() {
   const [addingTo, setAddingTo] = useState(null) // { directorateId, programmeId }
 
   const [showAuth, setShowAuth] = useState(false)
-  const [githubToken, setGithubToken] = useState(() => localStorage.getItem('gds_gh_token') || '')
+  const [githubToken, setGithubToken] = useState(() => sessionStorage.getItem('gds_gh_token') || '')
   const [githubUser, setGithubUser] = useState(null)
 
   const [saving, setSaving] = useState(false)
@@ -35,7 +35,7 @@ export default function App() {
     if (!githubToken) { setGithubUser(null); return }
     validateToken(githubToken).then(setGithubUser).catch(() => {
       setGithubToken('')
-      localStorage.removeItem('gds_gh_token')
+      sessionStorage.removeItem('gds_gh_token')
     })
   }, [githubToken])
 
@@ -124,14 +124,14 @@ export default function App() {
 
   function handleAuth(token) {
     setGithubToken(token)
-    localStorage.setItem('gds_gh_token', token)
+    sessionStorage.setItem('gds_gh_token', token)
     setShowAuth(false)
   }
 
   function handleSignOut() {
     setGithubToken('')
     setGithubUser(null)
-    localStorage.removeItem('gds_gh_token')
+    sessionStorage.removeItem('gds_gh_token')
   }
 
   const filtered = applyFilters(data)
