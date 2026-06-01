@@ -29,3 +29,7 @@ dist-ssr
 !.dev.vars.example
 .env*
 !.env.example
+
+# secrets / keys (never commit GitHub App private keys)
+*.pem
+*.key

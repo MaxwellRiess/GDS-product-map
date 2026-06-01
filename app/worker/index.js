@@ -105,17 +105,25 @@ async function verifySession(env, token) {
 // --- GitHub App installation token (server-side commit credential) ---
 
 async function appJwt(env) {
+  if (!env.GITHUB_APP_PRIVATE_KEY || !env.GITHUB_APP_PRIVATE_KEY.includes('BEGIN PRIVATE KEY')) {
+    throw new Error('private_key_not_pkcs8')
+  }
   const now = Math.floor(Date.now() / 1000)
   const header = { alg: 'RS256', typ: 'JWT' }
   const payload = { iat: now - 60, exp: now + 540, iss: env.GITHUB_APP_ID }
   const data = `${b64urlEncode(JSON.stringify(header))}.${b64urlEncode(JSON.stringify(payload))}`
-  const key = await crypto.subtle.importKey(
-    'pkcs8',
-    pemToArrayBuffer(env.GITHUB_APP_PRIVATE_KEY),
-    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  )
+  let key
+  try {
+    key = await crypto.subtle.importKey(
+      'pkcs8',
+      pemToArrayBuffer(env.GITHUB_APP_PRIVATE_KEY),
+      { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+      false,
+      ['sign'],
+    )
+  } catch {
+    throw new Error('private_key_import_failed')
+  }
   const sig = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(data))
   return `${data}.${b64urlEncode(sig)}`
 }
@@ -133,7 +141,10 @@ async function installationToken(env) {
       },
     },
   )
-  if (!res.ok) throw new Error('Could not obtain installation token')
+  if (!res.ok) {
+    const body = await res.text()
+    throw new Error(`installation_token_${res.status}: ${body.slice(0, 200)}`)
+  }
   const data = await res.json()
   return data.token
 }
@@ -272,8 +283,8 @@ export default {
       let token
       try {
         token = await installationToken(env)
-      } catch {
-        return json({ error: 'app_auth_failed' }, 502)
+      } catch (e) {
+        return json({ error: 'app_auth_failed', detail: e.message }, 502)
       }
 
       const apiUrl = `https://api.github.com/repos/${REPO}/contents/${DATA_FILE_PATH}`

@@ -47,6 +47,6 @@ export async function commitProductData(newData) {
   if (!res.ok) {
     const err = await res.json().catch(() => ({}))
     if (res.status === 401) throw new Error('Your session has expired. Please sign in again.')
-    throw new Error(err.error || 'Failed to save changes')
+    throw new Error(err.detail ? `${err.error}: ${err.detail}` : err.error || 'Failed to save changes')
   }
 }
