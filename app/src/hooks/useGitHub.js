@@ -1,23 +1,16 @@
 const DATA_FILE_PATH = 'app/public/products.json'
 
-// Set this to your deployed Cloudflare Worker URL (no trailing slash).
-export const OAUTH_WORKER_URL = 'https://gds-product-map-oauth.REPLACE-ME.workers.dev'
-
 // Opens the GitHub consent popup and resolves with an access token.
+// /auth and /callback are served by the same Worker as this app.
 export function loginWithGitHub() {
   return new Promise((resolve, reject) => {
-    const popup = window.open(
-      `${OAUTH_WORKER_URL}/auth`,
-      'github-oauth',
-      'width=620,height=720',
-    )
+    const popup = window.open('/auth', 'github-oauth', 'width=620,height=720')
     if (!popup) {
       reject(new Error('Popup blocked. Allow popups for this site and try again.'))
       return
     }
-    const workerOrigin = new URL(OAUTH_WORKER_URL).origin
     function handler(event) {
-      if (event.origin !== workerOrigin) return
+      if (event.origin !== window.location.origin) return
       if (!event.data || event.data.type !== 'github-oauth') return
       window.removeEventListener('message', handler)
       try { popup.close() } catch { /* ignore */ }

@@ -1,13 +1,11 @@
-// GitHub OAuth proxy for the GDS Product Map.
-// Holds the OAuth client secret server-side so it never reaches the browser.
-// Two routes:
+// Serves the static app and handles GitHub OAuth on the same origin.
 //   GET /auth      redirects the popup to GitHub's consent screen
 //   GET /callback  exchanges the code for a token and posts it back to the app
+//   everything else is served from the built static assets
 //
-// Required config (set via wrangler):
-//   GITHUB_CLIENT_ID      secret  - OAuth App client ID
-//   GITHUB_CLIENT_SECRET  secret  - OAuth App client secret
-//   ALLOWED_ORIGIN        var     - the app's origin, e.g. https://maxwellriess.github.io
+// Required secrets (set via wrangler secret put):
+//   GITHUB_CLIENT_ID
+//   GITHUB_CLIENT_SECRET
 
 const COOKIE_NAME = 'gds_oauth_state'
 
@@ -28,13 +26,12 @@ function parseCookies(header) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url)
-    const redirectUri = `${url.origin}/callback`
 
     if (url.pathname === '/auth') {
       const state = crypto.randomUUID()
       const authUrl = new URL('https://github.com/login/oauth/authorize')
       authUrl.searchParams.set('client_id', env.GITHUB_CLIENT_ID)
-      authUrl.searchParams.set('redirect_uri', redirectUri)
+      authUrl.searchParams.set('redirect_uri', `${url.origin}/callback`)
       authUrl.searchParams.set('scope', 'public_repo')
       authUrl.searchParams.set('state', state)
       return new Response(null, {
@@ -62,7 +59,7 @@ export default {
             client_id: env.GITHUB_CLIENT_ID,
             client_secret: env.GITHUB_CLIENT_SECRET,
             code,
-            redirect_uri: redirectUri,
+            redirect_uri: `${url.origin}/callback`,
           }),
         })
         const data = await res.json()
@@ -80,7 +77,7 @@ export default {
 (function () {
   var payload = ${JSON.stringify(payload)};
   if (window.opener) {
-    window.opener.postMessage(payload, ${JSON.stringify(env.ALLOWED_ORIGIN)});
+    window.opener.postMessage(payload, ${JSON.stringify(url.origin)});
   }
   window.close();
 })();
@@ -94,6 +91,6 @@ export default {
       })
     }
 
-    return new Response('Not found', { status: 404 })
+    return env.ASSETS.fetch(request)
   },
 }
