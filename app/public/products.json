@@ -30,18 +30,6 @@
               "tech_lead": "",
               "designer": "",
               "notes": ""
-            },
-            {
-              "id": "govuk-app",
-              "name": "GOV.UK App",
-              "description": "Mobile app giving citizens direct access to government services and personalised notifications.",
-              "status": "live",
-              "url": "",
-              "github_repos": [],
-              "product_manager": "",
-              "tech_lead": "",
-              "designer": "",
-              "notes": "Programme lead: Gemma Hyde"
             }
           ]
         },
@@ -173,6 +161,18 @@
               "tech_lead": "",
               "designer": "",
               "notes": ""
+            },
+            {
+              "id": "govuk-app",
+              "name": "GOV.UK App",
+              "description": "Mobile app giving citizens direct access to government services and personalised notifications.",
+              "status": "live",
+              "url": "",
+              "github_repos": [],
+              "product_manager": "",
+              "tech_lead": "",
+              "designer": "",
+              "notes": "Programme lead: Gemma Hyde"
             }
           ]
         },
