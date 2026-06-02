@@ -19,9 +19,9 @@ const EMPTY_PRODUCT = {
 export default function ProductModal({
   product,
   isNew,
-  directorates,
+  groups,
+  defaultGroupId,
   defaultDirectorateId,
-  defaultProgrammeId,
   onClose,
   onSave,
   saving,
@@ -31,8 +31,8 @@ export default function ProductModal({
   const [editing, setEditing] = useState(isNew)
   const [form, setForm] = useState(product || EMPTY_PRODUCT)
   const [reposInput, setReposInput] = useState((product?.github_repos || []).join(', '))
+  const [targetGroup, setTargetGroup] = useState(defaultGroupId || '')
   const [targetDirectorate, setTargetDirectorate] = useState(defaultDirectorateId || '')
-  const [targetProgramme, setTargetProgramme] = useState(defaultProgrammeId || '')
 
   useEffect(() => {
     function onKey(e) { if (e.key === 'Escape') onClose() }
@@ -50,10 +50,10 @@ export default function ProductModal({
       ? (form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now())
       : form.id
     const updated = { ...form, id, github_repos: repos }
-    onSave(updated, targetDirectorate, targetProgramme)
+    onSave(updated, targetGroup, targetDirectorate)
   }
 
-  const programmes = directorates?.find(d => d.id === targetDirectorate)?.programmes || []
+  const directorates = groups?.find(g => g.id === targetGroup)?.directorates || []
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
@@ -91,28 +91,28 @@ export default function ProductModal({
         <div className="px-6 py-5 space-y-5">
           {editing ? (
             <>
-              {/* Directorate/programme placement (new products and moves) */}
-              {directorates && (
+              {/* Group/directorate placement (new products and moves) */}
+              {groups && (
                 <div className="grid grid-cols-2 gap-4">
+                  <Field label="Group">
+                    <select
+                      value={targetGroup}
+                      onChange={e => { setTargetGroup(e.target.value); setTargetDirectorate('') }}
+                      className="input"
+                    >
+                      <option value="">Select...</option>
+                      {groups.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
+                    </select>
+                  </Field>
                   <Field label="Directorate">
                     <select
                       value={targetDirectorate}
-                      onChange={e => { setTargetDirectorate(e.target.value); setTargetProgramme('') }}
+                      onChange={e => setTargetDirectorate(e.target.value)}
                       className="input"
+                      disabled={!targetGroup}
                     >
                       <option value="">Select...</option>
                       {directorates.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
-                    </select>
-                  </Field>
-                  <Field label="Programme">
-                    <select
-                      value={targetProgramme}
-                      onChange={e => setTargetProgramme(e.target.value)}
-                      className="input"
-                      disabled={!targetDirectorate}
-                    >
-                      <option value="">Select...</option>
-                      {programmes.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                     </select>
                   </Field>
                 </div>
@@ -175,7 +175,7 @@ export default function ProductModal({
               <div className="flex gap-3 pt-2">
                 <button
                   onClick={handleSave}
-                  disabled={saving || !form.name || !targetDirectorate || !targetProgramme}
+                  disabled={saving || !form.name || !targetGroup || !targetDirectorate}
                   className="bg-gds-green text-white font-medium px-5 py-2 rounded hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {saving ? 'Saving...' : 'Save changes'}
@@ -185,8 +185,8 @@ export default function ProductModal({
                     onClick={() => {
                       setForm(product)
                       setReposInput((product?.github_repos || []).join(', '))
+                      setTargetGroup(defaultGroupId || '')
                       setTargetDirectorate(defaultDirectorateId || '')
-                      setTargetProgramme(defaultProgrammeId || '')
                       setEditing(false)
                     }}
                     className="text-gds-grey hover:text-gds-dark text-sm underline"

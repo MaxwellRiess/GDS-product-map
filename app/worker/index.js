@@ -151,12 +151,15 @@ async function installationToken(env) {
 
 // Rejects anything that is not the shape we expect, so a bad request can't
 // overwrite products.json with garbage.
+// Shape: groups[] → directorates[] → products[].
 function isValidProductData(d) {
-  if (!d || typeof d !== 'object' || !Array.isArray(d.directorates)) return false
-  return d.directorates.every(
-    dir =>
-      dir && typeof dir.id === 'string' && Array.isArray(dir.programmes) &&
-      dir.programmes.every(p => p && Array.isArray(p.products)),
+  if (!d || typeof d !== 'object' || !Array.isArray(d.groups)) return false
+  return d.groups.every(
+    group =>
+      group && typeof group.id === 'string' && Array.isArray(group.directorates) &&
+      group.directorates.every(
+        dir => dir && typeof dir.id === 'string' && Array.isArray(dir.products),
+      ),
   )
 }
 

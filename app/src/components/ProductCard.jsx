@@ -6,7 +6,7 @@ const PERSON_FIELDS = [
   { key: 'designer', label: 'Designer' },
 ]
 
-export default function ProductCard({ product, directorateColour, onClick }) {
+export default function ProductCard({ product, groupColour, onClick }) {
   const hasAnyPerson = PERSON_FIELDS.some(f => product[f.key])
 
   return (
@@ -16,7 +16,7 @@ export default function ProductCard({ product, directorateColour, onClick }) {
     >
       <div
         className="absolute top-0 left-0 right-0 h-1"
-        style={{ backgroundColor: directorateColour }}
+        style={{ backgroundColor: groupColour }}
       />
       <div className="p-4 pt-5">
         <div className="flex items-start justify-between gap-2 mb-2">
