@@ -91,17 +91,6 @@
                     "govuk-one-login/ipv-core-front"
                   ],
                   "components": []
-                },
-                {
-                  "id": "c-1780399642506-l6be",
-                  "name": "One Login Developer Platform",
-                  "team_type": "platform",
-                  "status": "live",
-                  "description": "Enabling efficient development practices and ensuring quality within GOV.UK One Login",
-                  "product_manager": "Ben Mortimer",
-                  "tech_lead": "",
-                  "github_repos": [],
-                  "components": []
                 }
               ]
             }
