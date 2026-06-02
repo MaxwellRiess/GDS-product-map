@@ -50,7 +50,7 @@
               "status": "beta",
               "url": "",
               "github_repos": [],
-              "product_manager": "",
+              "product_manager": "Sam Dub",
               "tech_lead": "",
               "designer": "",
               "notes": "Programme lead: Shelina Hargrove"
@@ -307,7 +307,7 @@
               "id": "redbox",
               "name": "Redbox",
               "description": "AI assistant for civil servants to read, analyse and summarise large documents quickly.",
-              "status": "deprecated",
+              "status": "live",
               "url": "",
               "github_repos": [
                 "i-dot-ai/redbox"
