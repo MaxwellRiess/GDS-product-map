@@ -42,18 +42,6 @@
               "tech_lead": "",
               "designer": "",
               "notes": "Programme lead: Gemma Hyde"
-            },
-            {
-              "id": "govuk-mailbox",
-              "name": "GOV.UK Mailbox",
-              "description": "A centralised inbox giving citizens a single place to receive messages from government.",
-              "status": "discovery",
-              "url": "",
-              "github_repos": [],
-              "product_manager": "",
-              "tech_lead": "",
-              "designer": "",
-              "notes": ""
             }
           ]
         },
@@ -173,6 +161,18 @@
               "tech_lead": "",
               "designer": "",
               "notes": "Programme lead: Shelina Hargrove"
+            },
+            {
+              "id": "govuk-mailbox",
+              "name": "GOV.UK Mailbox",
+              "description": "A centralised inbox giving citizens a single place to receive messages from government.",
+              "status": "discovery",
+              "url": "",
+              "github_repos": [],
+              "product_manager": "",
+              "tech_lead": "",
+              "designer": "",
+              "notes": ""
             }
           ]
         },
