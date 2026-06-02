@@ -44,18 +44,6 @@
               "notes": "Programme lead: Gemma Hyde"
             },
             {
-              "id": "govuk-ai-chat",
-              "name": "GOV.UK AI and Chat",
-              "description": "AI-powered chat and search capabilities layered on GOV.UK content.",
-              "status": "beta",
-              "url": "",
-              "github_repos": [],
-              "product_manager": "Sam Dub",
-              "tech_lead": "",
-              "designer": "",
-              "notes": "Programme lead: Shelina Hargrove"
-            },
-            {
               "id": "govuk-mailbox",
               "name": "GOV.UK Mailbox",
               "description": "A centralised inbox giving citizens a single place to receive messages from government.",
@@ -84,7 +72,7 @@
                 "govuk-one-login/authentication-api",
                 "govuk-one-login/ipv-core-front"
               ],
-              "product_manager": "",
+              "product_manager": "Isabel",
               "tech_lead": "",
               "designer": "",
               "notes": "Identity Programme: Neil Warsop; Identity Product: Dan Brember; Identity Delivery: Jessica Feldman"
@@ -173,6 +161,18 @@
               "tech_lead": "",
               "designer": "",
               "notes": ""
+            },
+            {
+              "id": "govuk-ai-chat",
+              "name": "GOV.UK AI and Chat",
+              "description": "AI-powered chat and search capabilities layered on GOV.UK content.",
+              "status": "beta",
+              "url": "",
+              "github_repos": [],
+              "product_manager": "",
+              "tech_lead": "",
+              "designer": "",
+              "notes": "Programme lead: Shelina Hargrove"
             }
           ]
         },
