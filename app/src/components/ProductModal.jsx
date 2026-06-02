@@ -50,7 +50,7 @@ export default function ProductModal({
       ? (form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now())
       : form.id
     const updated = { ...form, id, github_repos: repos }
-    onSave(updated, isNew ? targetDirectorate : null, isNew ? targetProgramme : null)
+    onSave(updated, targetDirectorate, targetProgramme)
   }
 
   const programmes = directorates?.find(d => d.id === targetDirectorate)?.programmes || []
@@ -91,8 +91,8 @@ export default function ProductModal({
         <div className="px-6 py-5 space-y-5">
           {editing ? (
             <>
-              {/* New product: directorate/programme picker */}
-              {isNew && directorates && (
+              {/* Directorate/programme placement (new products and moves) */}
+              {directorates && (
                 <div className="grid grid-cols-2 gap-4">
                   <Field label="Directorate">
                     <select
@@ -175,14 +175,20 @@ export default function ProductModal({
               <div className="flex gap-3 pt-2">
                 <button
                   onClick={handleSave}
-                  disabled={saving || !form.name || (isNew && (!targetDirectorate || !targetProgramme))}
+                  disabled={saving || !form.name || !targetDirectorate || !targetProgramme}
                   className="bg-gds-green text-white font-medium px-5 py-2 rounded hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {saving ? 'Saving...' : 'Save changes'}
                 </button>
                 {!isNew && (
                   <button
-                    onClick={() => { setForm(product); setEditing(false) }}
+                    onClick={() => {
+                      setForm(product)
+                      setReposInput((product?.github_repos || []).join(', '))
+                      setTargetDirectorate(defaultDirectorateId || '')
+                      setTargetProgramme(defaultProgrammeId || '')
+                      setEditing(false)
+                    }}
                     className="text-gds-grey hover:text-gds-dark text-sm underline"
                   >
                     Cancel

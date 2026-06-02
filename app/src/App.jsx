@@ -73,40 +73,45 @@ export default function App() {
     }
   }
 
+  // Where does a given product currently live? Used to pre-select the
+  // directorate/programme pickers and to detect a move on save.
+  function findLocation(productId) {
+    for (const d of data.directorates) {
+      for (const p of d.programmes) {
+        if (p.products.some(prod => prod.id === productId)) {
+          return { directorateId: d.id, programmeId: p.id }
+        }
+      }
+    }
+    return { directorateId: '', programmeId: '' }
+  }
+
+  // Handles add, in-place edit, and moving a product to another
+  // directorate/programme in a single pass. The product is replaced where it
+  // already sits (preserving order), removed from any other programme it was
+  // in, and inserted into the chosen target if it isn't there yet.
   function handleSaveProduct(updatedProduct, directorateId, programmeId) {
     if (!githubUser) { setShowAuth(true); return }
 
-    let newData
-    if (directorateId && programmeId) {
-      // New product
-      newData = {
-        ...data,
-        directorates: data.directorates.map(d =>
-          d.id !== directorateId ? d : {
-            ...d,
-            programmes: d.programmes.map(p =>
-              p.id !== programmeId ? p : {
-                ...p,
-                products: [...p.products, updatedProduct],
-              }
-            ),
+    const newData = {
+      ...data,
+      directorates: data.directorates.map(d => ({
+        ...d,
+        programmes: d.programmes.map(p => {
+          const isTarget = d.id === directorateId && p.id === programmeId
+          const hadProduct = p.products.some(prod => prod.id === updatedProduct.id)
+
+          if (isTarget) {
+            return hadProduct
+              ? { ...p, products: p.products.map(prod => prod.id === updatedProduct.id ? updatedProduct : prod) }
+              : { ...p, products: [...p.products, updatedProduct] }
           }
-        ),
-      }
-    } else {
-      // Update existing
-      newData = {
-        ...data,
-        directorates: data.directorates.map(d => ({
-          ...d,
-          programmes: d.programmes.map(p => ({
-            ...p,
-            products: p.products.map(prod =>
-              prod.id === updatedProduct.id ? updatedProduct : prod
-            ),
-          })),
-        })),
-      }
+          // Not the target: drop the product if it was previously here (a move).
+          return hadProduct
+            ? { ...p, products: p.products.filter(prod => prod.id !== updatedProduct.id) }
+            : p
+        }),
+      })),
     }
 
     persist(newData, () => {
@@ -189,6 +194,9 @@ export default function App() {
         <ProductModal
           product={selectedProduct}
           isNew={false}
+          directorates={data.directorates}
+          defaultDirectorateId={findLocation(selectedProduct.id).directorateId}
+          defaultProgrammeId={findLocation(selectedProduct.id).programmeId}
           authenticated={authenticated}
           onClose={() => setSelectedProduct(null)}
           onSave={handleSaveProduct}
