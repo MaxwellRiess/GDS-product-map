@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react'
 import StatusBadge from './StatusBadge'
+import TeamTypeBadge from './TeamTypeBadge'
+import ComponentTree from './ComponentTree'
+import ComponentEditor from './ComponentEditor'
+import { TEAM_TYPES, teamType } from '../teamTypes'
 
 const STATUSES = ['live', 'beta', 'alpha', 'discovery', 'deprecated']
 
@@ -8,12 +12,14 @@ const EMPTY_PRODUCT = {
   name: '',
   description: '',
   status: 'discovery',
+  team_type: 'stream-aligned',
   url: '',
   github_repos: [],
   product_manager: '',
   tech_lead: '',
   designer: '',
   notes: '',
+  components: [],
 }
 
 export default function ProductModal({
@@ -131,11 +137,18 @@ export default function ProductModal({
                 />
               </Field>
 
-              <Field label="Status">
-                <select value={form.status} onChange={e => set('status', e.target.value)} className="input">
-                  {STATUSES.map(s => <option key={s} value={s}>{capitalize(s)}</option>)}
-                </select>
-              </Field>
+              <div className="grid grid-cols-2 gap-4">
+                <Field label="Status">
+                  <select value={form.status} onChange={e => set('status', e.target.value)} className="input">
+                    {STATUSES.map(s => <option key={s} value={s}>{capitalize(s)}</option>)}
+                  </select>
+                </Field>
+                <Field label="Team type" hint={teamType(form.team_type).description}>
+                  <select value={form.team_type || 'stream-aligned'} onChange={e => set('team_type', e.target.value)} className="input">
+                    {TEAM_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                  </select>
+                </Field>
+              </div>
 
               <div className="grid grid-cols-3 gap-4">
                 <Field label="Product manager">
@@ -163,6 +176,16 @@ export default function ProductModal({
                   onChange={e => set('notes', e.target.value)}
                   className="input min-h-[60px] resize-none"
                   placeholder="Anything else useful..."
+                />
+              </Field>
+
+              <Field
+                label="Components & platforms"
+                hint="Sub-teams, components and platforms that make up this product. Tag each with its Team Topologies team type."
+              >
+                <ComponentEditor
+                  value={form.components || []}
+                  onChange={arr => set('components', arr)}
                 />
               </Field>
 
@@ -202,8 +225,9 @@ export default function ProductModal({
             </>
           ) : (
             <>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <StatusBadge status={form.status} />
+                <TeamTypeBadge value={form.team_type} />
                 {form.url && (
                   <a
                     href={form.url}
@@ -257,6 +281,13 @@ export default function ProductModal({
                 <div>
                   <h4 className="text-xs font-semibold text-gds-grey uppercase tracking-wide mb-1">Notes</h4>
                   <p className="text-gds-grey text-sm">{form.notes}</p>
+                </div>
+              )}
+
+              {form.components?.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-semibold text-gds-grey uppercase tracking-wide mb-2">Components &amp; platforms</h4>
+                  <ComponentTree components={form.components} />
                 </div>
               )}
 

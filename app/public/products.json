@@ -53,7 +53,46 @@
               "product_manager": "Isabel",
               "tech_lead": "",
               "designer": "",
-              "notes": "Identity Programme: Neil Warsop; Identity Product: Dan Brember; Identity Delivery: Jessica Feldman"
+              "notes": "Identity Programme: Neil Warsop; Identity Product: Dan Brember; Identity Delivery: Jessica Feldman",
+              "components": [
+                {
+                  "id": "one-login-authentication",
+                  "name": "Authentication",
+                  "team_type": "complicated-subsystem",
+                  "status": "live",
+                  "description": "Core authentication and credential management: sign-in, MFA, and session handling.",
+                  "product_manager": "",
+                  "tech_lead": "",
+                  "github_repos": [
+                    "govuk-one-login/authentication-api"
+                  ],
+                  "components": []
+                },
+                {
+                  "id": "one-login-home",
+                  "name": "One Login Home",
+                  "team_type": "stream-aligned",
+                  "status": "live",
+                  "description": "The signed-in home where users manage their GOV.UK One Login and see connected services.",
+                  "product_manager": "",
+                  "tech_lead": "",
+                  "github_repos": [],
+                  "components": []
+                },
+                {
+                  "id": "one-login-identity-proofing",
+                  "name": "Identity proofing",
+                  "team_type": "complicated-subsystem",
+                  "status": "live",
+                  "description": "Verifying a user's identity to the required level of confidence.",
+                  "product_manager": "",
+                  "tech_lead": "",
+                  "github_repos": [
+                    "govuk-one-login/ipv-core-front"
+                  ],
+                  "components": []
+                }
+              ]
             }
           ]
         },
