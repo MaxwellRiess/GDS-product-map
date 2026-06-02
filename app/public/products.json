@@ -3,13 +3,13 @@
     "last_updated": "2026-05-28",
     "repo": "MaxwellRiess/GDS-product-map"
   },
-  "directorates": [
+  "groups": [
     {
       "id": "gds-digital-products",
       "name": "GDS Digital Products",
       "colour": "#1d70b8",
-      "director": "Christine Bellamy",
-      "programmes": [
+      "lead": "Christine Bellamy",
+      "directorates": [
         {
           "id": "govuk-publishing",
           "name": "GOV.UK & Publishing",
@@ -20,6 +20,7 @@
               "name": "GOV.UK",
               "description": "The UK government's single domain — the authoritative source for all government information and services.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "https://www.gov.uk",
               "github_repos": [
                 "alphagov/whitehall",
@@ -43,6 +44,7 @@
               "name": "GOV.UK One Login",
               "description": "Single sign-on and identity verification for government services. Lets people create one login to access multiple services.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "https://www.sign-in.service.gov.uk",
               "github_repos": [
                 "govuk-one-login/authentication-api",
@@ -65,6 +67,7 @@
               "name": "GOV.UK Notify",
               "description": "Lets government services send emails, text messages and letters to users at scale, reliably and cheaply.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "https://www.notifications.service.gov.uk",
               "github_repos": [
                 "alphagov/notifications-api",
@@ -81,6 +84,7 @@
               "name": "GOV.UK Pay",
               "description": "Lets government services take and manage payments online. Handles cards, direct debit and open banking.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "https://www.payments.service.gov.uk",
               "github_repos": [
                 "alphagov/pay-publicapi",
@@ -97,6 +101,7 @@
               "name": "GOV.UK Forms",
               "description": "Lets civil servants build accessible online forms quickly, without needing technical skills.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "https://www.forms.service.gov.uk",
               "github_repos": [
                 "alphagov/forms-runner",
@@ -113,6 +118,7 @@
               "name": "GOV.UK Design System",
               "description": "Styles, components and patterns for building accessible, consistent government services. Used across hundreds of services.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "https://design-system.service.gov.uk",
               "github_repos": [
                 "alphagov/govuk-frontend",
@@ -128,6 +134,7 @@
               "name": "Emergency alerts",
               "description": "Nationwide emergency alert system",
               "status": "beta",
+              "team_type": "stream-aligned",
               "url": "https://www.gov.uk/alerts",
               "github_repos": [
                 "https://github.com/alphagov/emergency-alerts-api",
@@ -143,6 +150,7 @@
               "name": "GOV.UK AI and Chat",
               "description": "AI-powered chat and search capabilities layered on GOV.UK content.",
               "status": "beta",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [],
               "product_manager": "",
@@ -155,6 +163,7 @@
               "name": "GOV.UK Mailbox",
               "description": "A centralised inbox giving citizens a single place to receive messages from government.",
               "status": "discovery",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [],
               "product_manager": "",
@@ -167,6 +176,7 @@
               "name": "GOV.UK App",
               "description": "Mobile app giving citizens direct access to government services and personalised notifications.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [],
               "product_manager": "",
@@ -186,6 +196,7 @@
               "name": "Reliability Engineering",
               "description": "Shared infrastructure, tooling and support enabling GDS product teams to ship reliably.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [
                 "alphagov/reliability-engineering",
@@ -208,6 +219,7 @@
               "name": "Service Manual",
               "description": "Guidance for government teams on how to design and build user-centred digital services.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "https://www.gov.uk/service-manual",
               "github_repos": [
                 "alphagov/service-manual-publisher"
@@ -225,8 +237,8 @@
       "id": "digital-transformation",
       "name": "Digital Transformation",
       "colour": "#4c2c92",
-      "director": "Emily Middleton",
-      "programmes": [
+      "lead": "Emily Middleton",
+      "directorates": [
         {
           "id": "service-design-delivery",
           "name": "Service Design & Delivery",
@@ -237,6 +249,7 @@
               "name": "Service Standard",
               "description": "The 14 points government services must meet before going live. Assessed during service assessments.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "https://www.gov.uk/service-manual/service-standard",
               "github_repos": [],
               "product_manager": "",
@@ -249,6 +262,7 @@
               "name": "Service Assessments",
               "description": "The process by which government services are assessed against the Service Standard before going live.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "https://www.gov.uk/service-manual/service-assessments",
               "github_repos": [
                 "alphagov/service-assessments"
@@ -270,6 +284,7 @@
               "name": "AI Playbook for Government",
               "description": "Practical guidance for government teams on adopting AI responsibly and effectively.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [],
               "product_manager": "",
@@ -289,6 +304,7 @@
               "name": "National Data Library",
               "description": "Programme to make public sector data more accessible for research, innovation and public benefit.",
               "status": "beta",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [],
               "product_manager": "",
@@ -308,6 +324,7 @@
               "name": "Redbox",
               "description": "AI assistant for civil servants to read, analyse and summarise large documents quickly.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [
                 "i-dot-ai/redbox"
@@ -322,6 +339,7 @@
               "name": "Consult",
               "description": "AI tool to help government teams analyse public consultation responses at scale.",
               "status": "beta",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [
                 "i-dot-ai/consultation-analyser"
@@ -336,6 +354,7 @@
               "name": "Aidria",
               "description": "AI-powered drafting assistant to help civil servants write ministerial correspondence.",
               "status": "beta",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [
                 "i-dot-ai/aidria"
@@ -357,6 +376,7 @@
               "name": "Geospatial Data Programme",
               "description": "Unlocking the value of location data across government and the UK economy.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [],
               "product_manager": "",
@@ -376,6 +396,7 @@
               "name": "National Cloud Infrastructure",
               "description": "Shared cloud infrastructure and services for central government departments.",
               "status": "discovery",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [],
               "product_manager": "",
@@ -391,8 +412,8 @@
       "id": "digital-foundations",
       "name": "Digital Foundations",
       "colour": "#28a197",
-      "director": "Sarah Connolly",
-      "programmes": [
+      "lead": "Sarah Connolly",
+      "directorates": [
         {
           "id": "cyber-digital-identity",
           "name": "Cyber Security & Digital Identity",
@@ -403,6 +424,7 @@
               "name": "UK Digital Identity Framework",
               "description": "Policy and technical standards enabling trusted digital identity across government and the private sector.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [],
               "product_manager": "",
@@ -415,6 +437,7 @@
               "name": "Cyber Security Advisory",
               "description": "Policy, guidance and services to improve cyber security across government and critical national infrastructure.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [],
               "product_manager": "",
@@ -434,6 +457,7 @@
               "name": "Digital Inclusion Strategy",
               "description": "National programme to ensure everyone can benefit from digital technology, including the most excluded.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "",
               "github_repos": [],
               "product_manager": "",
@@ -453,6 +477,7 @@
               "name": "Project Gigabit",
               "description": "UK government programme to deliver gigabit-capable broadband to hard-to-reach areas.",
               "status": "live",
+              "team_type": "stream-aligned",
               "url": "https://www.gov.uk/guidance/project-gigabit-uk-gigabit-programme",
               "github_repos": [],
               "product_manager": "",

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import FilterBar from './components/FilterBar'
-import DirectorateSection from './components/DirectorateSection'
+import GroupSection from './components/GroupSection'
 import ProductModal from './components/ProductModal'
 import GitHubAuth from './components/GitHubAuth'
 import { commitProductData, fetchSession, logout } from './hooks/useGitHub'
@@ -10,10 +10,10 @@ export default function App() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState(null)
-  const [filters, setFilters] = useState({ search: '', status: 'all', directorate: 'all' })
+  const [filters, setFilters] = useState({ search: '', status: 'all', group: 'all' })
 
   const [selectedProduct, setSelectedProduct] = useState(null)
-  const [addingTo, setAddingTo] = useState(null) // { directorateId, programmeId }
+  const [addingTo, setAddingTo] = useState(null) // { groupId, directorateId }
 
   const [showAuth, setShowAuth] = useState(false)
   const [githubUser, setGithubUser] = useState(null)
@@ -34,17 +34,17 @@ export default function App() {
 
   function applyFilters(rawData) {
     if (!rawData) return null
-    const { search, status, directorate } = filters
+    const { search, status, group } = filters
     return {
       ...rawData,
-      directorates: rawData.directorates
-        .filter(d => directorate === 'all' || d.id === directorate)
-        .map(d => ({
-          ...d,
-          programmes: d.programmes
-            .map(p => ({
-              ...p,
-              products: p.products.filter(prod => {
+      groups: rawData.groups
+        .filter(g => group === 'all' || g.id === group)
+        .map(g => ({
+          ...g,
+          directorates: g.directorates
+            .map(dir => ({
+              ...dir,
+              products: dir.products.filter(prod => {
                 const q = search.toLowerCase()
                 const matchSearch = !q
                   || prod.name.toLowerCase().includes(q)
@@ -53,9 +53,9 @@ export default function App() {
                 return matchSearch && (status === 'all' || prod.status === status)
               }),
             }))
-            .filter(p => p.products.length > 0 || directorate !== 'all'),
+            .filter(dir => dir.products.length > 0 || group !== 'all'),
         }))
-        .filter(d => d.programmes.some(p => p.products.length > 0)),
+        .filter(g => g.directorates.some(dir => dir.products.length > 0)),
     }
   }
 
@@ -74,42 +74,42 @@ export default function App() {
   }
 
   // Where does a given product currently live? Used to pre-select the
-  // directorate/programme pickers and to detect a move on save.
+  // group/directorate pickers and to detect a move on save.
   function findLocation(productId) {
-    for (const d of data.directorates) {
-      for (const p of d.programmes) {
-        if (p.products.some(prod => prod.id === productId)) {
-          return { directorateId: d.id, programmeId: p.id }
+    for (const g of data.groups) {
+      for (const dir of g.directorates) {
+        if (dir.products.some(prod => prod.id === productId)) {
+          return { groupId: g.id, directorateId: dir.id }
         }
       }
     }
-    return { directorateId: '', programmeId: '' }
+    return { groupId: '', directorateId: '' }
   }
 
   // Handles add, in-place edit, and moving a product to another
-  // directorate/programme in a single pass. The product is replaced where it
-  // already sits (preserving order), removed from any other programme it was
+  // group/directorate in a single pass. The product is replaced where it
+  // already sits (preserving order), removed from any other directorate it was
   // in, and inserted into the chosen target if it isn't there yet.
-  function handleSaveProduct(updatedProduct, directorateId, programmeId) {
+  function handleSaveProduct(updatedProduct, groupId, directorateId) {
     if (!githubUser) { setShowAuth(true); return }
 
     const newData = {
       ...data,
-      directorates: data.directorates.map(d => ({
-        ...d,
-        programmes: d.programmes.map(p => {
-          const isTarget = d.id === directorateId && p.id === programmeId
-          const hadProduct = p.products.some(prod => prod.id === updatedProduct.id)
+      groups: data.groups.map(g => ({
+        ...g,
+        directorates: g.directorates.map(dir => {
+          const isTarget = g.id === groupId && dir.id === directorateId
+          const hadProduct = dir.products.some(prod => prod.id === updatedProduct.id)
 
           if (isTarget) {
             return hadProduct
-              ? { ...p, products: p.products.map(prod => prod.id === updatedProduct.id ? updatedProduct : prod) }
-              : { ...p, products: [...p.products, updatedProduct] }
+              ? { ...dir, products: dir.products.map(prod => prod.id === updatedProduct.id ? updatedProduct : prod) }
+              : { ...dir, products: [...dir.products, updatedProduct] }
           }
           // Not the target: drop the product if it was previously here (a move).
           return hadProduct
-            ? { ...p, products: p.products.filter(prod => prod.id !== updatedProduct.id) }
-            : p
+            ? { ...dir, products: dir.products.filter(prod => prod.id !== updatedProduct.id) }
+            : dir
         }),
       })),
     }
@@ -161,23 +161,23 @@ export default function App() {
         <FilterBar
           filters={filters}
           onChange={setFilters}
-          directorates={data.directorates}
+          groups={data.groups}
         />
 
         <div className="space-y-10 mt-8">
-          {filtered?.directorates.map(d => (
-            <DirectorateSection
-              key={d.id}
-              directorate={d}
+          {filtered?.groups.map(g => (
+            <GroupSection
+              key={g.id}
+              group={g}
               authenticated={authenticated}
               onProductClick={setSelectedProduct}
-              onAddProduct={(directorateId, programmeId) =>
-                setAddingTo({ directorateId, programmeId })
+              onAddProduct={(groupId, directorateId) =>
+                setAddingTo({ groupId, directorateId })
               }
             />
           ))}
 
-          {filtered?.directorates.length === 0 && (
+          {filtered?.groups.length === 0 && (
             <div className="text-center py-20 text-gds-grey">
               No products match your filters.
             </div>
@@ -194,9 +194,9 @@ export default function App() {
         <ProductModal
           product={selectedProduct}
           isNew={false}
-          directorates={data.directorates}
+          groups={data.groups}
+          defaultGroupId={findLocation(selectedProduct.id).groupId}
           defaultDirectorateId={findLocation(selectedProduct.id).directorateId}
-          defaultProgrammeId={findLocation(selectedProduct.id).programmeId}
           authenticated={authenticated}
           onClose={() => setSelectedProduct(null)}
           onSave={handleSaveProduct}
@@ -210,9 +210,9 @@ export default function App() {
         <ProductModal
           product={null}
           isNew
-          directorates={data.directorates}
+          groups={data.groups}
+          defaultGroupId={addingTo.groupId}
           defaultDirectorateId={addingTo.directorateId}
-          defaultProgrammeId={addingTo.programmeId}
           authenticated={authenticated}
           onClose={() => setAddingTo(null)}
           onSave={handleSaveProduct}

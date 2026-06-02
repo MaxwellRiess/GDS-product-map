@@ -1,6 +1,6 @@
 const STATUSES = ['all', 'live', 'beta', 'alpha', 'discovery', 'deprecated']
 
-export default function FilterBar({ filters, onChange, directorates }) {
+export default function FilterBar({ filters, onChange, groups }) {
   function set(key, value) {
     onChange({ ...filters, [key]: value })
   }
@@ -32,22 +32,22 @@ export default function FilterBar({ filters, onChange, directorates }) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gds-dark mb-1">Directorate</label>
+        <label className="block text-sm font-medium text-gds-dark mb-1">Group</label>
         <select
-          value={filters.directorate}
-          onChange={e => set('directorate', e.target.value)}
+          value={filters.group}
+          onChange={e => set('group', e.target.value)}
           className="border-2 border-gds-dark rounded px-3 py-2 text-sm focus:outline-none focus:border-gds-blue bg-white"
         >
-          <option value="all">All directorates</option>
-          {directorates.map(d => (
-            <option key={d.id} value={d.id}>{d.name}</option>
+          <option value="all">All groups</option>
+          {groups.map(g => (
+            <option key={g.id} value={g.id}>{g.name}</option>
           ))}
         </select>
       </div>
 
-      {(filters.search || filters.status !== 'all' || filters.directorate !== 'all') && (
+      {(filters.search || filters.status !== 'all' || filters.group !== 'all') && (
         <button
-          onClick={() => onChange({ search: '', status: 'all', directorate: 'all' })}
+          onClick={() => onChange({ search: '', status: 'all', group: 'all' })}
           className="text-sm text-gds-blue underline hover:text-gds-blue-dark self-end pb-2"
         >
           Clear filters
