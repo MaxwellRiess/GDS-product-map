@@ -61,8 +61,8 @@
                   "team_type": "complicated-subsystem",
                   "status": "live",
                   "description": "Core authentication and credential management: sign-in, MFA, and session handling.",
-                  "product_manager": "Sam Hadwen",
-                  "tech_lead": "Alex Wilson",
+                  "product_manager": "Tony Richards",
+                  "tech_lead": "Daniel Besbrode",
                   "github_repos": [
                     "govuk-one-login/authentication-api"
                   ],
