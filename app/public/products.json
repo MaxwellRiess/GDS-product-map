@@ -50,8 +50,8 @@
                 "govuk-one-login/authentication-api",
                 "govuk-one-login/ipv-core-front"
               ],
-              "product_manager": "Isabel Hodson",
-              "tech_lead": "Pete Conish",
+              "product_manager": "Isabel",
+              "tech_lead": "",
               "designer": "",
               "notes": "Identity Programme: Neil Warsop; Identity Product: Dan Brember; Identity Delivery: Jessica Feldman",
               "components": [
@@ -61,8 +61,8 @@
                   "team_type": "complicated-subsystem",
                   "status": "live",
                   "description": "Core authentication and credential management: sign-in, MFA, and session handling.",
-                  "product_manager": "",
-                  "tech_lead": "",
+                  "product_manager": "Sam Hadwen",
+                  "tech_lead": "Alex Wilson",
                   "github_repos": [
                     "govuk-one-login/authentication-api"
                   ],
