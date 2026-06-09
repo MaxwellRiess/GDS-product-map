@@ -21,6 +21,7 @@ function ComponentNode({ component, depth }) {
     component.description ||
     component.product_manager ||
     component.tech_lead ||
+    component.designer ||
     component.github_repos?.length,
   )
   const expandable = hasChildren || hasDetail
@@ -58,11 +59,12 @@ function ComponentNode({ component, depth }) {
           {component.description && (
             <p className="text-sm text-gds-grey">{component.description}</p>
           )}
-          {(component.product_manager || component.tech_lead) && (
+          {(component.product_manager || component.tech_lead || component.designer) && (
             <p className="text-xs text-gds-grey mt-1">
               {[
                 component.product_manager && `PM: ${component.product_manager}`,
                 component.tech_lead && `Tech lead: ${component.tech_lead}`,
+                component.designer && `Design lead: ${component.designer}`,
               ].filter(Boolean).join('  ·  ')}
             </p>
           )}
