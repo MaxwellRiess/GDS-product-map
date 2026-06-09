@@ -13,6 +13,7 @@ function newComponent() {
     description: '',
     product_manager: '',
     tech_lead: '',
+    designer: '',
     github_repos: [],
     components: [],
   }
@@ -126,7 +127,7 @@ function ComponentRow({ component, depth, onChange, onRemove }) {
             placeholder="What does this component do?"
           />
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             <input
               value={component.product_manager}
               onChange={e => onChange({ product_manager: e.target.value })}
@@ -138,6 +139,12 @@ function ComponentRow({ component, depth, onChange, onRemove }) {
               onChange={e => onChange({ tech_lead: e.target.value })}
               className="cinput"
               placeholder="Tech lead"
+            />
+            <input
+              value={component.designer}
+              onChange={e => onChange({ designer: e.target.value })}
+              className="cinput"
+              placeholder="Design lead"
             />
           </div>
 
