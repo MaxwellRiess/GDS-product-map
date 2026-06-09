@@ -50,8 +50,8 @@
                 "govuk-one-login/authentication-api",
                 "govuk-one-login/ipv-core-front"
               ],
-              "product_manager": "Isabel Hogdson",
-              "tech_lead": "",
+              "product_manager": "Isabel Hodson",
+              "tech_lead": "Pete Conish",
               "designer": "",
               "notes": "Identity Programme: Neil Warsop; Identity Product: Dan Brember; Identity Delivery: Jessica Feldman",
               "components": [
